@@ -7,9 +7,9 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
+import static java.util.Map.Entry.comparingByValue;
 
 /**
  * Created by LaunchCode
@@ -74,9 +74,9 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase();
 
-            if (aValue.contains(value)) {
+            if (aValue.contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
@@ -124,5 +124,48 @@ public class JobData {
             e.printStackTrace();
         }
     }
+
+    public static ArrayList<HashMap<String, String>> findByValue(String value) {
+
+            // load data, if not already loaded
+        loadData();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+            String aValue = row.values().toString().toLowerCase();
+
+            if (aValue.contains(value.toLowerCase())) {
+                jobs.add(row);
+            }
+        }
+
+        return jobs;
+    }
+
+/*Attempt to add sorting to list results.
+    public static ArrayList<HashMap<String, String>> sortJobList(ArrayList<HashMap<String, String>> list, String value) {
+//might have the option to use the searched term and if no specific term then sort by position type?
+        ArrayList<HashMap<String, String>> sortedJobs = new ArrayList<>(list);
+
+        if (value.isEmpty()) {
+//sort using position type as default
+            Collections.sort(sortedJobs, new Comparator<HashMap<String,String>>() {
+                @Override
+                public int compare(HashMap<String, String> o1, HashMap<String, String> o2) {
+                    return o1.get("position type").compareTo(o2.get("position type"));
+                }
+            });
+        }else {
+//sort using given used search term column
+            Collections.sort(sortedJobs, new Comparator<HashMap<String,String>>() {
+                @Override
+                public int compare(HashMap<String, String> o1, HashMap<String, String> o2) {
+                    return o1.get(value).compareTo(o2.get(value));
+                }
+            });
+        }
+        return sortedJobs;
+    }*/
 
 }
